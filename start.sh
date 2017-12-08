@@ -1,0 +1,1 @@
+nohup ./albums_web conf/cf.xml >stdout_`date +%Y%m%d-%H:%M:%d`.log 2>&1 &

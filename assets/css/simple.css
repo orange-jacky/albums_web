@@ -1,0 +1,69 @@
+table.gridtable_normal {
+	font-family: verdana, arial, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse
+}
+table.gridtable_normal th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede
+}
+table.gridtable_normal td {
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff
+}
+table.gridtable {
+	font-family: verdana, arial, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+	width: 100%
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede
+}
+table.gridtable td {
+	text-align: center;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: #666666
+}
+table.gridtable tr {
+	text-align: center;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #BFEFFF
+}
+table.gridtable .change {
+	background-color: #ADD8E6
+}
+table.gridtable .change2 {
+	background-color: #F0F8FF
+}
+.container ul {
+	margin: 0;
+	padding: 0
+}
+text-align:center;
+border-width: 1px;
+padding: 1px;
+border-style: solid;
+border-color: #666666
+}

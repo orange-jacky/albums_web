@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/assets/icon/favicon.ico">
+    <title>Signin Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/signin.css" rel="stylesheet">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.cookie.js"></script>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+</head>
+
+<body>
+    <div class="container">
+        <form id="form_signin" class="form-signin" action="./signin" , method="POST">
+            <h2 class="form-signin-heading">欢迎使用albums</h2>
+            <label for="inputEmail" class="sr-only">Username</label>
+            <input type="text" id="inputUser" name="username" class="form-control" placeholder="用户名" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="密码" required>
+            <!--
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me" id="remember_me"> 记住我
+                    </label>
+                </div>
+                -->
+        </form>
+        <div class="form-signin">
+            <button type="submit" id="button_signin" class="btn btn-lg btn-primary btn-block">登录</button>
+            <div>
+                <p class="bg-info">没有账户,请先<a href="" id="link1" data-toggle="modal" data-target="#myModal">注册</a></p>
+            </div>
+            <!-- the result will be rendered inside this div -->
+            <div id="signin_result">
+                <p class="bg-info"></p>
+            </div>
+        </div>
+    </div>
+    <!-- /container -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">注册新用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form_signup" action="./signup" , method="POST">
+                        <div class="form-group">
+                            <label for="text">用户名</label>
+                            <input type="text" name="username" class="form-control" id="newInputUsername" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="text">密码</label>
+                            <input type="password" name="password" class="form-control" id="newInputPassword" placeholder="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="button_canncel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id="button_signup" type="submit" class="btn btn-default">提交</button>
+                </div>
+                <!-- the result will be rendered inside this div -->
+                <div id="signup_result">
+                    <p class="bg-info"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!-- script -->
+    <script>
+    $(function() {
+        var remember = $.cookie('remember');
+        if (remember == 'true') {
+            var username = $.cookie('username');
+            $('#inputUser').val(username);
+        }
+
+        function remember_me() {
+            if ($('#remember_me').is(':checked')) {
+                // save username
+                var username = $('#inputUser').val()
+                $.cookie('username', username);
+                $.cookie('remember', true)
+            } else {
+                //reset cookies
+                $.cookie('remember', null);
+            }
+        }
+        $('#button_signin').click(function() {
+            var $form = $('#form_signin');
+            username = $form.find("input[name='username']").val();
+            password = $form.find("input[name='password']").val();
+            url = $form.attr("action");
+            // Send the data using post
+            var posting = $.post(url, { username: username, password: password });
+            // Put the results in a div
+            posting.done(function(data) {
+                var ret = jQuery.parseJSON(data);
+                var desc = "";
+                if (ret.hasOwnProperty("status")) {
+                    desc = "用户名/密码输入错误,请重新输入"
+                } else if (ret.hasOwnProperty("token")) {
+                    $.cookie('token', ret.token);
+                    $.cookie('username', username);
+                    // desc = "登陆成功,准备跳转"
+                    jump_content();
+                }
+                $("#signin_result").find('p').empty().append(desc);
+            });
+        });
+
+        function jump_content() {
+            username = $.cookie('username');
+            url = "./content"
+            token = $.cookie('token')
+            // Send the data using post
+            post(url, { username: username, token: token });
+            //get 方法,不支持post方法
+            //window.location.href = url
+        }
+        //post一个表单,并跳转到url页面
+        function post(url, args) {
+            var body = $(document.body),
+                form = $("<form method='post'></form>"),
+                input;
+            form.attr({ "action": url });
+            $.each(args, function(key, value) {
+                input = $("<input type='hidden'>");
+                input.attr({ "name": key });
+                input.val(value);
+                form.append(input);
+            });
+            form.appendTo(document.body);
+            form.submit();
+            document.body.removeChild(form[0]);
+        }
+        $('#button_signup').click(function() {
+            button_signup();
+        });
+
+        function button_signup() {
+            // Get some values from elements on the page:
+            var $form = $('#form_signup');
+            username = $form.find("input[name='username']").val();
+            password = $form.find("input[name='password']").val();
+            url = $form.attr("action");
+            // Send the data using post
+            var posting = $.post(url, { username: username, password: password });
+            // Put the results in a div
+            posting.done(function(data) {
+                var ret = jQuery.parseJSON(data);
+                var desc = "";
+                if (ret.status == -100) {
+                    desc = "请重试"
+                } else if (ret.status == -1) {
+                    desc = "创建用户" + username + "失败"
+                } else if (ret.status == -2) {
+                    desc = "存在多个用户" + username
+                } else if (ret.status == 0) {
+                    desc = "创建用户" + username + "成功,请登录"
+                } else if (ret.status == 1) {
+                    desc = "创建用用户" + username + "成功,创建默认相册失败,请登录,并手动创建相册"
+                } else if (ret.status == 2) {
+                    desc = "用户" + username + "已被使用,请尝试其他用户名"
+                }
+                $("#signup_result").find('p').empty().append(desc);
+            });
+        }
+    });
+    </script>
+    <!-- script -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>

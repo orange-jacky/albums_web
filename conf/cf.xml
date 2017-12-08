@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configure>
+    <gin_server>
+        <!--debug/release-->
+        <mode>release</mode>
+        <url>/albums_web</url>
+        <port>9010</port>
+        <timeout_read_s>120</timeout_read_s>
+        <timeout_write_s>120</timeout_write_s>
+    </gin_server>
+    <backend> 
+        <host>http://47.104.21.233:9000</host>
+        <url>
+            <signup>/signup</signup>
+            <login>/login</login>
+            <upload>/auth/upload</upload>
+            <download>/auth/download</download>
+            <delete>/auth/delete</delete>
+            <search>/auth/search</search>
+            <albummgt>
+                <insert>/auth/managealbum/insert</insert>
+                <delete>/auth/managealbum/delete</delete>
+                <get>/auth/managealbum/get</get>
+            </albummgt>
+            <deeplearning>/auth/deeplearning</deeplearning>
+            <objectdetection_dl>/auth/objectdetection_dl</objectdetection_dl>
+        </url>    	
+    </backend>
+</configure>

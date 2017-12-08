@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/asset/icon/favicon.ico">
+    <title>Sticky Footer Navbar Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/sticky-footer-navbar.css" rel="stylesheet">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.cookie.js"></script>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+</head>
+
+<body>
+    <ol class="breadcrumb">
+        <li class="active">相册列表</li>
+    </ol>
+    <div class="container-fluid">
+        <div>
+            <!-- Nav tabs -->
+            <ul id="tablist" class="nav nav-tabs" role="tablist">
+            </ul>
+            <!-- Tab panes -->
+            <div id="tabcontent" class="tab-content">
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!--
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-md modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">图片信息 </h4>
+                </div>
+                <div class="modal-body" id="showImg"></div>
+                <div class="modal-footer">
+                    <ul class="pager">
+                        <li><a href="" data-dismiss="modal">关闭</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+    <script type="text/javascript">
+    function getLiid(album) {
+        return "li_" + album
+    }
+
+    function addTablist(tablistid, active, album) {
+        var obj = document.getElementById(tablistid);
+        var li = document.createElement("li");
+        li.setAttribute("role", "presentation")
+        li.setAttribute("class", active)
+        li.setAttribute("name", album)
+        li.setAttribute("id", getLiid(album))
+        var a = document.createElement("a");
+        a.setAttribute("href", "#" + album);
+        a.setAttribute("aria-controls", album)
+        a.setAttribute("role", "tab")
+        a.setAttribute("data-toggle", "tab")
+        click = "getimages(" + album + ")"
+        a.setAttribute("onclick", click)
+        a.text = album
+        li.appendChild(a)
+        obj.appendChild(li)
+    }
+
+    function addTabcontent(tabcontentid, tabpanelid, imagelistid, active) {
+        var obj = document.getElementById(tabcontentid);
+        var div = document.createElement("div");
+        div.setAttribute("role", "tabpanel")
+        div.setAttribute("class", "tab-pane" + " " + active)
+        div.setAttribute("id", tabpanelid)
+        imglist = createImagelist(imagelistid)
+        div.appendChild(imglist)
+        obj.appendChild(div)
+    }
+
+    function createImagelist(imagelistid) {
+        var obj = document.createElement("div");
+        obj.setAttribute("class", "container");
+        var div = document.createElement("div");
+        div.setAttribute("class", "row");
+        div.setAttribute("id", imagelistid);
+        obj.appendChild(div)
+        return obj
+    };
+
+    function addThumbnail(imagelistid, imgid, src, filename) {
+        var obj = document.getElementById(imagelistid);
+        var col = document.createElement("div");
+        col.setAttribute("class", "col-sm-3  col-md-4");
+        var div = document.createElement("div");
+        div.setAttribute("class", "thumbnail");
+        var a = document.createElement("a");
+        a.setAttribute("href", "#")
+        a.setAttribute("data-toggle", "modal")
+        a.setAttribute("data-target", "#myModal")
+        var img = document.createElement("img");
+        img.setAttribute("id", imgid);
+        img.setAttribute("style", "height:180px;width:100%;display:block;")
+        img.src = src
+        img.setAttribute("alt", "");
+        img.setAttribute("class", "img-responsive")
+        a.appendChild(img)
+        div.appendChild(a);
+        caption = document.createElement("div");
+        caption.setAttribute("class", "caption");
+        h = document.createElement("h5");
+        h.innerText = filename
+        caption.appendChild(h);
+        div.appendChild(caption);
+        col.appendChild(div)
+        obj.appendChild(col);
+    };
+
+    function getimages(album) {
+        username = $.cookie('username');
+        $.ajax({
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            url: './download',
+            data: { "username": username, "album": album },
+            success: function(data) {
+                var resp = jQuery.parseJSON(data);
+                if (resp.status == 0) {
+                    if (resp.total == 0) {
+                        alert("相册为空,请上传图片")
+                    } else {
+                        array = resp.data
+                        myalbum = array[0].album
+                        var obj = document.getElementById("imglist_"+myalbum);
+                        obj.innerHTML = "";
+                        for (var p in array) {
+                            d = array[p]
+                            desc = d.filename + "/" + d.album
+                            src = d.url
+                            addThumbnail("imglist_" + d.album, "", src, desc)
+                        }
+                    }
+                } else if (resp.status == 401 || resp.status == "401") {
+                    alert("回话超过一个小时了,请重新登录");
+                } else {
+                    if (resp.statusdescription == "null") {
+                        resp.statusdescription = ""
+                    }
+                    alert("获取图片失败" + resp.statusdescription);
+                }
+            }
+        })
+    };
+
+    function getalbumlist() {
+        username = $.cookie('username');
+        $.ajax({
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            url: './alist',
+            data: { "username": username },
+            success: function(data) {
+                var resp = jQuery.parseJSON(data);
+                if (resp.status == 0) {
+                    if (resp.total == 0) {
+                        alert("相册列表为空,请先创建相册")
+                    } else {
+                        var tablist = document.getElementById('tablist');
+                        var tabcontent = document.getElementById('tabcontent');
+                        var saveArray = new Array(); //保留相册名
+                        var delArray = new Array(); //删除相册名
+                        var createArray = new Array(); //新添加相册名
+                        //找出要删除的结点
+                        $(tablist).find("li").each(function(i, item) {
+                            var name = $(item).attr("name")
+                            find = false
+                            for (var p in resp.data) {
+                                albumname = resp.data[p];
+                                if (name.trim() == albumname.trim()) {
+                                    find = true
+                                    break
+                                }
+                            }
+                            if (find == false) {
+                                delArray.push(name.trim())
+                            } else {
+                                saveArray.push(name.trim())
+                            }
+                        });
+                        //找出要新添加的结点
+                        for (var p in resp.data) {
+                            albumname = resp.data[p]
+                            find = false
+                            for (i = 0; i < saveArray.length; i++) {
+                                name = saveArray[i]
+                                if (albumname.trim() == name.trim()) {
+                                    find = true
+                                    break
+                                }
+                            }
+                            if (find == false) {
+                                createArray.push(albumname.trim())
+                            }
+                        }
+                        //删除结点
+                        for (i = 0; i < delArray.length; i++) {
+                            name = delArray[i]
+                            var li_node = document.getElementById(getLiid(name));
+                            li_node.parentNode.removeNode(li_node);
+                            var panel_node = document.getElementById(name);
+                            panel_node.parentNode.removeNode(panel_node);
+                        }
+                        //添加新节点
+                        for (i = 0; i < createArray.length; i++) {
+                            name = createArray[i]
+                            addTablist("tablist", "", name)
+                            addTabcontent("tabcontent", name, "imglist_" + name, "", "")
+                        }
+                    }
+                } else if (resp.status == 401 || resp.status == "401") {
+                    alert("回话超过一个小时了,请重新登录");
+                } else {
+                    if (resp.statusdescription == "null") {
+                        resp.statusdescription = ""
+                    }
+                    alert("获取用户相册列表失败" + resp.statusdescription);
+                }
+            }
+        })
+    };
+    //打开页面自动获取数据
+    //https://developer.mozilla.org/zh-CN/docs/Web/Events/DOMContentLoaded
+    document.addEventListener("DOMContentLoaded", function(event) {
+        getalbumlist()
+    });
+    </script>
+</body>
+
+</html>

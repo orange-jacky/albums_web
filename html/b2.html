@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <title>Welcome to b!</title>
+    <style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/asset/icon/favicon.ico">
+    <title>Sticky Footer Navbar Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/sticky-footer-navbar.css" rel="stylesheet">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+    <h1>Welcome to b!</h1>
+    <div class="container">
+        <div class="row">
+            {{range .}}
+            <div class="col-xs-6 col-md-3">
+                <div class="thumbnail">
+                    <a href="#" id="link1" data-toggle="modal" data-target="#myModal">
+						<img src="{{.Url}}" alt="..." style="height:180px;width:100%;display:block;" class="img-rounded">
+					</a>
+                    <div class="caption">
+                        <h3>{{.Filename}}</h3>
+                        <p>写入时间:{{.Updatetime}}</p>
+                        <p><a href="" class="btn btn-primary" role="button">删除</a> <a href="" class="btn btn-default" role="button">下载</a></p>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-md modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">your image title here (can be dynamic) </h4>
+                </div>
+                <div class="modal-body" id="showImg">
+                </div>
+                <div class="modal-footer">
+                    <ul class="pager">
+                        <li><a href="#">上一张</a></li>
+                        <li><a href="#">下一张</a></li>
+                        <li><a href="" data-dismiss="modal">关闭</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+            </li>
+        </ul>
+    </nav>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('img').on('click', function() {
+            $("#showImg").empty();
+            var image = $(this).attr("src");
+            $("#showImg").append("<img class='img-responsive' src='" + image + "' />")
+            //alert(image);
+        })
+    });
+    </script>
+</body>
+
+</html>

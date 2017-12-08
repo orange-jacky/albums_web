@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/asset/icon/favicon.ico">
+    <title>Sticky Footer Navbar Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/dashboard.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/sticky-footer-navbar.css" rel="stylesheet">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.cookie.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Albums</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a data-toggle="modal" data-target="#user_info">用户</a></li>
+                    <li><a href="./login">退出</a></li>
+                    <!--
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Help</a></li>
+                    -->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="搜索...">
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#" onclick="menuClick('./albumlist')">相册列表</a></li>
+                    <li><a href="#" onclick="menuClick('./upload')">上传</a></li>
+                    <li><a href="#" onclick="menuClick('./search')">搜索</a></li>
+                </ul>
+                <!--
+                <ul class="nav nav-sidebar nav-stacked">
+                    <li><a href="#albums_manage" class="nav-header collapsed" data-toggle="collapse">
+                            相册管理
+                        </a>
+                        <ul id="albums_manage" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li><a href="#" onclick="menuClick('./a')">新建</a></li>
+                            <li><a href="#" onclick="menuClick('./b')">删除</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#systemSetting1" class="nav-header collapsed" data-toggle="collapse">
+                            index1
+                        </a>
+                        <ul id="systemSetting1" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li><a href="#" onclick="menuClick('./c')">ccc</a></li>
+                            <li><a href="#">ddd</a></li>
+                            <li><a href="#">eee</a></li>
+                        </ul>
+                    </li>
+                /ul>
+                -->
+                <!--
+                <ul class="nav nav-sidebar nav-stacked">
+                    <li><a>相册管理</a></li>
+                    <li><a href="#" onclick="menuClick('./b')">新建</a></li>
+                    <li><a href="#" onclick="menuClick('./b')">删除</a></li>
+                </ul>
+                -->
+                <ul class="nav nav-sidebar">
+                    <!--
+                    <li><a>图片内容识别</a></li>
+                    -->
+                    <li><a href="#" onclick="menuClick('./objectdection')">物体检测方式</a></li>
+                    <li><a href="#" onclick="menuClick('./deeplearning')">深度学习方式</a></li>
+                </ul>
+                <!--
+                <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                </ul>
+                -->
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <!-- 内容展示页 -->
+                <div>
+                    <div class="container">
+                        <iframe id="iframe-page-content" src="" width="100%" height="100%" frameborder="no" border="0" marginwidth="10" marginheight="10" scrolling="yes" allowtransparency="yes" onload="iFrameHeight();"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="user_info" tabindex="-1" role="dialog" aria-labelledby="user_info_label">
+        <div class="modal-dialog modal-sm modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="user_info_label">用户信息</h4> </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <script type="text/javascript">
+    function menuClick(menuUrl) {
+        //  username = getUsername()
+        // token = getToken()
+        // menuUrl = menuUrl + "?" + "username=" + username + "&" + "token=" + token
+        $("#iframe-page-content").attr('src', menuUrl);
+    };
+    <!--js代码解决iframe展示页面不全的问题-->
+    setInterval("iFrameHeight()", 500); //定时刷新任务,解决iframe 高度问题
+    function iFrameHeight() {
+        var ifm = document.getElementById("iframe-page-content");
+        var subWeb = document.frames ? document.frames["iframe-page-content"].document : ifm.contentDocument;
+        if (ifm != null && subWeb != null) {
+            ifm.height = subWeb.body.scrollHeight;
+        }
+    };
+
+    function getUsername() {
+        username = $.cookie('username');
+    };
+
+    function getToken() {
+        token = $.cookie('token');
+    };
+
+    function getCookieValue(name) {
+        var strCookie = document.cookie;
+        var arrCookie = strCookie.split(";");
+        for (var i = 0; i < arrCookie.length; i++) {
+            var c = arrCookie[i].split("=");
+            if ( c[0].trim() == name.trim()) {
+                return c[1].trim();
+            }
+        }
+        return "";
+    }
+    $(document).ready(function() {
+        $('#user_info').on('show.bs.modal', function(event) {
+            var target = $(event.relatedTarget); // Button that triggered the modal
+            username = getCookieValue('username');
+            var modal = $(this)
+            info = "用户名:"+username
+            modal.find('.modal-body').text(info)
+        })
+    });
+    </script>
+    <footer class="footer col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+        <div class="container">
+            <p class="text-muted">欢迎使用开源相册管理平台Album.</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script>
+    window.jQuery || document.write('<script src="/assets/js/jquery.min.js"><\/script>')
+    </script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>
